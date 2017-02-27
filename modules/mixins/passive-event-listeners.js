@@ -6,18 +6,24 @@
 var addPassiveEventListener = function(target, eventName, listener) {
     var supportsPassiveOption = (function(){
         var supportsPassiveOption = false;
-        try {
-            var opts = Object.defineProperty({}, 'passive', {
-                get: function() {
-                    supportsPassiveOption = true;
-                }
-            });
-            window.addEventListener('test', null, opts);
-        } catch (e) {}
+        if (window.addEventListener) {
+          try {
+              var opts = Object.defineProperty({}, 'passive', {
+                  get: function() {
+                      supportsPassiveOption = true;
+                  }
+              });
+              window.addEventListener('test', null, opts);
+          } catch (e) {}
+        }
         return supportsPassiveOption;
     })();
 
-    target.addEventListener(eventName, listener, supportsPassiveOption ? {passive: true} : false);
+    if (!target.addEventListener && target.attachEvent) {
+      target.attachEvent('on' + eventName, listener);
+    } else {
+      target.addEventListener(eventName, listener, supportsPassiveOption ? {passive: true} : false);
+    }
 };
 
 module.exports = addPassiveEventListener;

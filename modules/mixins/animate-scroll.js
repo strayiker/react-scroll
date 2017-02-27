@@ -30,7 +30,7 @@ var currentWindowProperties = function() {
 var requestAnimationFrameHelper = (function () {
   return  currentWindowProperties() ||
           function (callback, element, delay) {
-              window.setTimeout(callback, delay || (1000/60), new Date().getTime());
+              window.setTimeout(function () { callback(new Date().getTime()); }, delay || (1000/60));
           };
 })();
 
@@ -86,11 +86,11 @@ var scrollContainerHeight = function() {
 var animateTopScroll = function(timestamp) {
 
   // Cancel on specific events
-  if(__cancel) { 
+  if(__cancel) {
     if(events.registered['end']) {
       events.registered['end'](__to, __target, __currentPositionY);
     }
-    return 
+    return
   };
 
   __deltaTop = Math.round(__targetPositionY - __startPositionY);

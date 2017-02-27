@@ -88,7 +88,11 @@ var scrollSpy = {
       this.spySetState.splice(this.spySetState.indexOf(stateHandler), 1);
     }
 
-    document.removeEventListener('scroll', this.scrollHandler);
+    if (!document.removeEventListener && document.detachEvent) {
+      document.detachEvent('onscroll', this.scrollHandler);
+    } else {
+      document.removeEventListener('scroll', this.scrollHandler);
+    }
   },
 
   update: function() {
