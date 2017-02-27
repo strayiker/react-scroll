@@ -73,7 +73,8 @@ var Helpers = {
         if (!element) return;
         var cords = element.getBoundingClientRect();
         var topBound = cords.top + y;
-        var bottomBound = topBound + cords.height;
+        var height = cords.height || (cords.bottom - cords.top);
+        var bottomBound = topBound + height;
         var offsetY = y - this.props.offset;
         var to = this.props.to;
         var isInside = (offsetY >= topBound && offsetY <= bottomBound);
@@ -143,8 +144,9 @@ var Helpers = {
                 if(!element){ return;}
 
                 var cords = element.getBoundingClientRect();
+                var height = cords.height || (cords.bottom - cords.top);
                 elemTopBound = (cords.top - containerTop + y);
-                elemBottomBound = elemTopBound + cords.height;
+                elemBottomBound = elemTopBound + height;
             }
 
 
