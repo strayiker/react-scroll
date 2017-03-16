@@ -32,6 +32,21 @@ module.exports = {
     return __activeLink;
   },
 
+  getStyle: function(elem) {
+    return window.getComputedStyle ? getComputedStyle(elem, "") : elem.currentStyle;
+  },
+
+  offsetParent: function(target) {
+    var offsetParent = target.offsetParent;
+
+    while (offsetParent && (offsetParent.nodeName.toLowerCase() !== "html"
+    && this.getStyle(offsetParent).position === "static")) {
+      offsetParent = offsetParent.offsetParent;
+    }
+
+    return offsetParent || document.documentElement;
+  },
+
   scrollTo: function(to, props) {
 
      /*
@@ -59,7 +74,7 @@ module.exports = {
 
       if(containerId && containerElement) {
         props.absolute = true;
-        if(containerElement !== target.offsetParent) {
+        if(containerElement !== this.offsetParent(target)) {
           if(!containerElement.contains(target)) {
             throw new Error('Container with ID ' + containerId + ' is not a parent of target ' + to);
           } else {
